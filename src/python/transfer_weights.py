@@ -22,6 +22,9 @@
 import numpy as np
 import os
 import re
+import sys
+
+TPU_WIDTH = int(sys.argv[1])
 
 # Open file
 file = open("weights.txt", 'w')
@@ -49,9 +52,9 @@ for path in list:
     print(str(weights))
     
     # Get appending size to fit the size of the TPU
-    appendix_column = (14 - (len(weights[0]) % 14)) % 14
+    appendix_column = (TPU_WIDTH - (len(weights[0]) % TPU_WIDTH)) % TPU_WIDTH
     print("Column appendix: " + str(appendix_column))
-    appendix_row = (14 - (len(weights) % 14)) % 14
+    appendix_row = (TPU_WIDTH - (len(weights) % TPU_WIDTH)) % TPU_WIDTH
     print("Row appendix: " + str(appendix_row))
     
     row_length = len(weights)+appendix_row
@@ -61,15 +64,15 @@ for path in list:
     
     
         
-    for matrix_column in range(0, column_length, 14):
+    for matrix_column in range(0, column_length, TPU_WIDTH):
         #print("Column: " + str(matrix_column))
-        for matrix_row in range(0, row_length, 14):
+        for matrix_row in range(0, row_length, TPU_WIDTH):
             #print("Row: " + str(matrix_row))
             #print("Next matrix:")
-            for sub_matrix_row in range(14):
+            for sub_matrix_row in range(TPU_WIDTH):
                 #print("Subrow: " + str(sub_matrix_row))
                 vector = []
-                for sub_matrix_column in range(14):
+                for sub_matrix_column in range(TPU_WIDTH):
                     #print("Subcolumn: " + str(sub_matrix_column))
                     if matrix_row+sub_matrix_row >= len(weights) or matrix_column+sub_matrix_column >= len(weights[0]):
                         vector.append(0)

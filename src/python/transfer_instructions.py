@@ -23,6 +23,7 @@ import numpy as np
 import serial
 import os
 import re
+import sys
 
 # Instructions are formatted like this:
 # op_code - calc_length - acc_addr - buffer_addr
@@ -30,6 +31,8 @@ import re
 # or
 # op_code - calc_length - weight_addr
 # [uint8,uint32,uint40]
+
+TPU_WIDTH = int(sys.argv[1])
 
 # Open file
 file = open("instructions.txt", 'w')
@@ -60,13 +63,13 @@ for path in list:
     print(str(weights))
     
     # Get appending size to fit the size of the TPU
-    appendix_column = (14 - (len(weights[0]) % 14)) % 14
+    appendix_column = (TPU_WIDTH - (len(weights[0]) % TPU_WIDTH)) % TPU_WIDTH
     print("Column appendix: " + str(appendix_column))
-    appendix_row = (14 - (len(weights) % 14)) % 14
+    appendix_row = (TPU_WIDTH - (len(weights) % TPU_WIDTH)) % TPU_WIDTH
     print("Row appendix: " + str(appendix_row))
     
     row_length = int(len(weights)+appendix_row)
-    column_length = int((len(weights[0])+appendix_column)/14)
+    column_length = int((len(weights[0])+appendix_column)/TPU_WIDTH)
     
     print("Rows: " + str(row_length) + " Columns: " + str(column_length))
     
@@ -76,15 +79,15 @@ for path in list:
     for matrix_column in range(column_length):
         print("Column: " + str(matrix_column))
         # Load first signed matrix
-        file.write("[9,14," + str(matrix_column*row_length + weight_count) + "]\n")
+        file.write("[9," + str(TPU_WIDTH) + "," + str(matrix_column*row_length + weight_count) + "]\n")
         # First signed matrix multiply without accumulation
-        file.write("[33,14," + str(matrix_column*14) + "," + str(input_base) + "]\n")
+        file.write("[33," + str(TPU_WIDTH) + "," + str(matrix_column*TPU_WIDTH) + "," + str(input_base) + "]\n")
         # Load signed weight - complete row exluding the first matrix
-        file.write("[9," + str(row_length-14) + "," + str(matrix_column*row_length+14 + weight_count) + "]\n")
+        file.write("[9," + str(row_length-TPU_WIDTH) + "," + str(matrix_column*row_length+TPU_WIDTH + weight_count) + "]\n")
         # Signed matrix multiply with accumulation
-        file.write("[35," + str(row_length-14) + "," + str(matrix_column*14) + "," + str(input_base+14) + "]\n")
+        file.write("[35," + str(row_length-TPU_WIDTH) + "," + str(matrix_column*TPU_WIDTH) + "," + str(input_base+TPU_WIDTH) + "]\n")
         # Activation - signed sigmoid
-        file.write("[153,14," + str(matrix_column*14) + "," + str(input_count+matrix_column*14) + "]\n")
+        file.write("[153," + str(TPU_WIDTH) + "," + str(matrix_column*TPU_WIDTH) + "," + str(input_count+matrix_column*TPU_WIDTH) + "]\n")
        
     weight_count = weight_count + column_length*row_length
 # Synchronize - calculations are finished

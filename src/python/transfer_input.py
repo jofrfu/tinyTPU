@@ -22,19 +22,21 @@
 import numpy as np
 import sys
 
+TPU_WIDTH = int(sys.argv[3])
+
 # Open file
 file = open("inputs.txt", 'w')
 
 file.write("inputs:[\n")
 
 inputs = np.loadtxt(str(sys.argv[1]), dtype=np.int8, delimiter=',')
-transfer_input = inputs[int(sys.argv[2]) : (int(sys.argv[2]) + 14)]
+transfer_input = inputs[int(sys.argv[2]) : (int(sys.argv[2]) + TPU_WIDTH)]
 print(str(transfer_input))
 
-for i in range(0, len(transfer_input[0]), 14):
-    for j in range(0, 14):
+for i in range(0, len(transfer_input[0]), TPU_WIDTH):
+    for j in range(0, TPU_WIDTH):
         vector = []
-        for k in range(i, i+14):
+        for k in range(i, i+TPU_WIDTH):
             if k >= len(transfer_input[0]):
                 vector.append(0)
             else:
