@@ -30,7 +30,10 @@ file = open("inputs.txt", 'w')
 file.write("inputs:[\n")
 
 inputs = np.loadtxt(str(sys.argv[1]), dtype=np.int8, delimiter=',')
-transfer_input = inputs[int(sys.argv[2]) : (int(sys.argv[2]) + TPU_WIDTH)]
+if (int(sys.argv[2]) + TPU_WIDTH) <= len(inputs):
+    transfer_input = inputs[int(sys.argv[2]) : (int(sys.argv[2]) + TPU_WIDTH)]
+else:
+    transfer_input = inputs[int(sys.argv[2]) : len(inputs)]
 print(str(transfer_input))
 
 for i in range(0, len(transfer_input[0]), TPU_WIDTH):
