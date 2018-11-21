@@ -21,6 +21,7 @@
 
 # include this
 !.gitignore
+!LICENSE.txt
 
 # include vhdl sources
 !src/vhdl/**/*.vhdl
