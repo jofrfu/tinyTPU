@@ -22,6 +22,7 @@
 # include this
 !.gitignore
 !LICENSE.txt
+!getting_started.pdf
 
 # include vhdl sources
 !src/vhdl/**/*.vhdl
