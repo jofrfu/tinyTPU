@@ -37,4 +37,4 @@ A sample model, trained with the MNIST dataset, was evaluated on different sized
 To get started with tinyTPU, please have a look at getting_started.pdf, where detailed instructions for Xilinx Zynq SoCs and Vivado can be found.
 
 ## More Information
-This project was developed during a bachelor thesis in technical computer science at the HAW Hamburg. If you want to know more about the co-processor, you can have a look at the thesis [here](https://drive.google.com/file/d/1ruGQ9-zKKLDuujQX47IoflLwsDpLhAaQ/view?usp=sharing) (german).
+This project was developed during a bachelor thesis in technical computer science at the HAW Hamburg. If you want to know more about the co-processor, you can have a look at the thesis [here](http://edoc.sub.uni-hamburg.de/haw/volltexte/2018/4456/) (german).
